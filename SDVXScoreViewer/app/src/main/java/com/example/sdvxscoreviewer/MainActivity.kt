@@ -32,6 +32,8 @@ class MainActivity : ComponentActivity() {
                     Greeting("犬わん")
                 }
             }
+
+            var xmlFile = assets.open("./music_db.xml");
         }
     }
 }
