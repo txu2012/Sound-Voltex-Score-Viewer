@@ -4,6 +4,7 @@ import java.util.List;
 import android.app.DownloadManager.Query
 import android.graphics.Movie
 import android.provider.DocumentsContract.Root
+import android.util.Log
 import org.xml.sax.InputSource
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
@@ -44,9 +45,9 @@ class SongExtract {
 
     private var songs = ArrayList<Song>()
     private var song: Song? = null
-    fun LoadXml()
+    fun GetSongList(): ArrayList<Song>
     {
-        //val serializer: Serializer = Persister()
+        return songs
     }
 
     fun ExtractXml(inputStream: InputStream)
@@ -59,6 +60,7 @@ class SongExtract {
         //parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true)
         //parser.setInput(inputStream, null)
         try {
+            Log.d("Xml","Start")
             val factory = XmlPullParserFactory.newInstance()
             factory.isNamespaceAware = true
 
@@ -73,7 +75,7 @@ class SongExtract {
                 val tag = parser.name
                 when (eventType) {
                     XmlPullParser.START_TAG -> {
-                        if (tag.equals("Song", ignoreCase = true)) {
+                        if (tag.equals("song", ignoreCase = true)) {
                             song = Song(1)
                         }
                     }
@@ -124,12 +126,15 @@ class SongExtract {
                     }
                     else -> {}
                 }
-
+                Log.d("Xml Tag","$tag")
+                Log.d("Xml Text","$xmlText")
                 eventType = parser.next()
             }
         } catch (e: XmlPullParserException) {
+            Log.d("Xml","Parse Exception")
             e.printStackTrace()
         } catch (e: IOException) {
+            Log.d("Xml","Io Exception")
             e.printStackTrace()
         }
     }
