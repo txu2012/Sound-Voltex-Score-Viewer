@@ -60,7 +60,6 @@ class SongExtract {
         //parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true)
         //parser.setInput(inputStream, null)
         try {
-            Log.d("Xml","Start")
             val factory = XmlPullParserFactory.newInstance()
             factory.isNamespaceAware = true
 
@@ -81,7 +80,10 @@ class SongExtract {
                     }
                     XmlPullParser.TEXT -> xmlText = parser.text
                     XmlPullParser.END_TAG -> {
-                        if (tag.equals("id", ignoreCase = true)) {
+                        if (tag.equals("song", ignoreCase = true)) {
+                            song?.let { songs.add(it) }
+                        }
+                        else if (tag.equals("id", ignoreCase = true)) {
                             song!!.Id = Integer.parseInt(xmlText)
                         }
                         else if (tag.equals("version", ignoreCase = true)) {
@@ -126,8 +128,6 @@ class SongExtract {
                     }
                     else -> {}
                 }
-                Log.d("Xml Tag","$tag")
-                Log.d("Xml Text","$xmlText")
                 eventType = parser.next()
             }
         } catch (e: XmlPullParserException) {
